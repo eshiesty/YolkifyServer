@@ -10,8 +10,10 @@ app.use(express.urlencoded());
 app.use(cookieParser());
 //import routes
 const authRoute = require("./routes/auth");
+const savedWorkoutsRoute = require("./routes/savedworkouts");
 
 app.use("/api/auth", authRoute);
+app.use("/api/savedworkouts", savedWorkoutsRoute);
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {

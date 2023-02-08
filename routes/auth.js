@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const validateRegisterInput = require("../validation/registerValidation");
 const jwt = require("jsonwebtoken");
 const requiresAuth = require("../middleware/permissions");
+
 //@route    GET /api/auth/test
 //@desc     Test the auth route
 //@access   Public
@@ -54,6 +55,7 @@ router.post("/login", async (req, res) => {
       email: new RegExp("^" + req.body.email + "$", "i"),
     });
     if (!user) {
+      console.log(res);
       return res
         .status(400)
         .json({ error: "there was a problem with your login credentials" });
@@ -88,6 +90,19 @@ router.post("/login", async (req, res) => {
     delete userToReturn.password;
     return res.json({ token: token, user: userToReturn });
   } catch (err) {
+    return res.status(500).send(err.message);
+  }
+});
+
+//@route    GET /api/auth/logout
+//@desc     Logout
+//@access   Public
+router.put("/logout", (req, res) => {
+  try {
+    res.clearCookie("access-token");
+    return res.json({ success: true });
+  } catch (err) {
+    console.log(err);
     return res.status(500).send(err.message);
   }
 });
